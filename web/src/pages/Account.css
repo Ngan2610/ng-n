@@ -1,0 +1,19 @@
+.account-page { padding-bottom: 72px; }
+.account-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:20px 0; }
+.account-card { border:1px solid var(--line); border-radius:16px; padding:24px; margin:20px 0; background:var(--panel); }
+.account-card h2 { margin-top:0; }
+.account-projects { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr)); gap:18px; }
+.account-projects .account-card { margin-bottom:0; }
+.account-card textarea { display:block; width:100%; min-height:110px; margin:10px 0; }
+.account-script { white-space:pre-wrap; overflow-wrap:anywhere; }
+.account-transcript { max-height:400px; overflow:auto; padding-left:24px; }
+.account-transcript li { padding:12px 0; border-bottom:1px solid var(--line); }
+.account-player { position:relative; max-width:900px; margin-top:20px; background:#111; }
+.account-player video { display:block; width:100%; max-height:520px; }
+.account-caption { position:absolute; bottom:50px; left:4%; right:4%; text-align:center; padding:8px; color:white; background:#000b; pointer-events:none; }
+.account-messages article { padding:18px 0; border-top:1px solid var(--line); margin-top:18px; }
+.account-reply { margin-top:12px; padding:16px; background:color-mix(in srgb,var(--good) 10%,var(--panel)); border-left:3px solid var(--good); }
+.project-save { border:1px solid var(--line); border-radius:14px; padding:20px; margin:24px 0; background:var(--panel); }
+.project-save input { display:block; width:100%; max-width:540px; margin:8px 0 14px; }
+
+.account-card textarea, .account-actions select, .project-save input { font:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; min-height:46px; }

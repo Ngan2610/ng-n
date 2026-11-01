@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.expo/
+web/.env
+mobile/.env
+.env
+server/.env
+server/uploads/
+artifacts/
+core
+core.*
+*.log
+.DS_Store
+
+# Local exports may contain customer data
+db/data/
+# Uploaded project document is kept locally, outside source publication
+Dubchef_FocusedUseCases.docx
+
+# Local editor settings
+.vscode/

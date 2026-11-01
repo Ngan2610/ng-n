@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/dist
+**/.env
+.env
+**/uploads
+mobile
+.github
+*.docx
+artifacts
+db/data

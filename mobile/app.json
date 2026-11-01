@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Dubchef",
+    "slug": "dubchef",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dubchef.app"
+    },
+    "android": {
+      "package": "com.dubchef.app"
+    },
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0a553c99-0f12-4ccf-8030-70b9d2620d80"
+      }
+    },
+    "owner": "ynhi38"
+  }
+}
