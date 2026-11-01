@@ -1,0 +1,28 @@
+{
+  "name": "dubchef",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Dubchef - thuyết minh tự động đa ngôn ngữ (Việt, Anh, Trung) cho video nấu ăn",
+  "scripts": {
+    "sync": "node scripts/sync-shared.mjs",
+    "test:shared": "node --test shared/*.test.mjs",
+    "test:server": "npm --prefix server test",
+    "db:up": "docker compose up -d --build",
+    "db:down": "docker compose down",
+    "test": "npm run test:shared && npm run test:server && npm --prefix web test && npm --prefix mobile test",
+    "web": "npm --prefix web run dev",
+    "mobile": "npm --prefix mobile run start",
+    "lint": "npm --prefix web run lint && npm --prefix mobile run lint",
+    "db:export": "node server/scripts/db-sync.mjs export",
+    "db:import": "node server/scripts/db-sync.mjs import",
+    "setup:local": "node scripts/setup-local.mjs",
+    "install:app": "npm --prefix server ci && npm --prefix web ci",
+    "start": "npm --prefix server start",
+    "build": "npm --prefix web run build",
+    "test:web": "npm --prefix web test",
+    "test:app": "npm run test:shared && npm run test:server && npm run test:web"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}

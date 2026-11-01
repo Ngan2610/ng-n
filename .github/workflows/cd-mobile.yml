@@ -1,0 +1,38 @@
+# CD (mobile): tạo bản cài Android (APK) bằng EAS Build khi gắn tag mobile-v*, hoặc bấm chạy tay
+# Cần: tài khoản Expo + secret EXPO_TOKEN (Settings > Secrets and variables > Actions)
+# Lần đầu chạy 'npx eas init' trong thư mục mobile để gắn dự án với tài khoản Expo.
+name: CD Mobile
+
+on:
+  push:
+    tags: ['mobile-v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm ci
+      - name: Build APK (chạy trên máy chủ Expo)
+        run: |
+          eas build --platform android --profile preview --non-interactive --no-wait --json | tee eas-build.json
+      - name: Ghi liên kết bản build vào tóm tắt của lần chạy
+        run: |
+          {
+            echo "### Bản build Android (EAS)"
+            echo "- Mã build: $(jq -r '.[0].id' eas-build.json)"
+            echo "- Xem tiến trình và tải APK: $(jq -r '.[0].buildDetailsPageUrl // empty' eas-build.json)"
+          } >> "$GITHUB_STEP_SUMMARY"
+

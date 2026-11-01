@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "0a553c99-0f12-4ccf-8030-70b9d2620d80"
+      }
+    },
+    "android": {
+      "package": "com.ynhi38.dubchef"
+    },
+    "ios": {
+      "bundleIdentifier": "com.ynhi38.dubchef",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}

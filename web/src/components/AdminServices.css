@@ -1,0 +1,24 @@
+.service-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 24px 0; flex-wrap: wrap; }
+.service-toolbar label { display: grid; gap: 8px; min-width: min(100%, 300px); }
+.service-toolbar input { width: 100%; min-height: 46px; padding: 10px 14px; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.service-records { display: grid; gap: 18px; }
+.service-record { padding: 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+.service-record h2 { font-size: 1.1rem; margin: 0 0 8px; overflow-wrap: anywhere; }
+.service-meta { color: var(--muted); font-size: .88rem; display: flex; gap: 8px 20px; flex-wrap: wrap; margin-bottom: 14px; }
+.service-text { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 220px; overflow-y: auto; }
+.service-record form { display: grid; gap: 16px; }
+.service-record label { display: grid; gap: 7px; font-weight: 600; }
+.service-record textarea { width: 100%; min-height: 140px; resize: vertical; font: inherit; line-height: 1.5; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+.service-record input, .service-record select { padding: 9px; font: inherit; border: 1px solid var(--line); border-radius: 8px; }
+.service-form-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.service-form-row label { flex: 1; min-width: 130px; }
+.service-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.service-error { color: var(--bad); padding: 12px; background: color-mix(in srgb, var(--bad) 10%, var(--panel)); border-radius: 8px; }
+.service-success { color: var(--good); }
+.service-empty { color: var(--muted); padding: 25px 0; }
+.service-table-wrap { overflow-x: auto; }
+.service-table-wrap table { width: 100%; border-collapse: collapse; }
+.service-table-wrap th, .service-table-wrap td { padding: 12px; border-bottom: 1px solid var(--line); text-align: left; }
+.service-badge { display: inline-block; padding: 3px 9px; border-radius: 20px; background: var(--bg); font-size: .82rem; }
+
+.service-record input, .service-record select, .service-record textarea { color: var(--ink); background: var(--panel); }

@@ -1,0 +1,48 @@
+name: dubchef
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD:?Chay npm run setup:local truoc}
+    ports:
+      - "127.0.0.1:${SQL_PORT:-14330}:1433"
+    volumes:
+      - dubchef-data:/var/opt/mssql
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    depends_on:
+      - db
+    environment:
+      PORT: "3000"
+      DB_HOST: db
+      DB_PORT: "1433"
+      DB_USER: sa
+      DB_PASSWORD: ${DB_PASSWORD:?Chay npm run setup:local truoc}
+      DB_NAME: DubchefDB
+      DB_TRUST_CERT: "true"
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@dubchef.vn}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Chay npm run setup:local truoc}
+      TOKEN_SECRET: ${TOKEN_SECRET:?Chay npm run setup:local truoc}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      PAYMENT_DEMO: ${PAYMENT_DEMO:-false}
+      SERVE_WEB: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - dubchef-uploads:/app/server/uploads
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 120s
+    restart: on-failure
+
+volumes:
+  dubchef-data:
+  dubchef-uploads:
