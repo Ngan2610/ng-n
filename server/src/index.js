@@ -1,13 +1,13 @@
 import { randomBytes } from 'node:crypto';
-import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { createApp } from './app.js';
 import { openRepo } from './db.js';
+import { loadLocalEnvironment, printDatabaseSettings, connectionErrorMessage } from './config.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-if (existsSync(join(root, '.env'))) process.loadEnvFile(join(root, '.env'));
+const loaded = loadLocalEnvironment();
 const production = process.env.NODE_ENV === 'production';
 const port = Number(process.env.PORT || 3000);
 const adminEmail = (process.env.ADMIN_EMAIL || 'admin@dubchef.vn').trim().toLowerCase();
@@ -18,7 +18,11 @@ if (production && (!process.env.TOKEN_SECRET || process.env.TOKEN_SECRET.length 
   throw new Error('TOKEN_SECRET cần ít nhất 32 ký tự trong production.');
 }
 const secret = process.env.TOKEN_SECRET || randomBytes(32).toString('hex');
-const repo = await openRepo();
+printDatabaseSettings(loaded);
+const repo = await openRepo().catch((error) => {
+  console.error(connectionErrorMessage(error));
+  process.exit(1);
+});
 if (await repo.ensureAdmin(adminEmail, adminPassword)) console.log('Đã tạo tài khoản quản trị từ cấu hình.');
 const app = createApp(repo, {
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173,http://127.0.0.1:5173',

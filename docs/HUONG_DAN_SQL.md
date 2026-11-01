@@ -2,9 +2,9 @@
 
 ## 1. Kết nối đúng SQL Server trong ảnh
 
-Ảnh SSMS cho thấy server `127.0.0.1,14330`, database `DubchefDB`. Đây là SQL Server trên máy của bạn; `127.0.0.1` trong máy cloud là một máy khác. Mã nguồn đã được nối SQL nhưng cần chạy backend trên máy có kết nối đến SQL Server của bạn để thấy dữ liệu trong SSMS đó.
+Bạn đã xác nhận SQL gốc là `localhost,1433`, database `DubchefDB`. Đây là SQL Server trên máy của bạn; `localhost` trong máy cloud là một máy khác. Mã nguồn đã được nối SQL nhưng cần chạy backend trên máy có kết nối đến SQL Server của bạn để thấy dữ liệu trong SSMS đó.
 
-Chạy `npm run setup:local` tại thư mục dự án. Chỉnh `.env`: `DB_HOST=127.0.0.1`, `DB_PORT=14330`, `DB_NAME=DubchefDB`, `DB_USER=sa`, `DB_PASSWORD` là mật khẩu của SQL đang chạy, `DB_TRUST_CERT=true` chỉ cho SQL phát triển dùng chứng chỉ tự ký. `npm start` sẽ tự tạo bảng còn thiếu. Nếu database đã có và user không có quyền tạo database, đặt `DB_SKIP_CREATE=true`; user vẫn cần quyền tạo/đổi các bảng và đọc/ghi dữ liệu.
+Chạy `npm run setup:local` tại thư mục dự án. Chỉnh `.env`: `DB_HOST=localhost`, `DB_PORT=1433`, `DB_NAME=DubchefDB`, `DB_USER=sa`, `DB_PASSWORD` là mật khẩu của SQL đang chạy, `DB_TRUST_CERT=true` chỉ cho SQL phát triển dùng chứng chỉ tự ký. `npm start` sẽ tự tạo bảng còn thiếu. Nếu database đã có và user không có quyền tạo database, đặt `DB_SKIP_CREATE=true`; user vẫn cần quyền tạo/đổi các bảng và đọc/ghi dữ liệu.
 
 Không chạy đồng thời container SQL mới vào đúng cổng SQL hiện có. Nếu dùng Docker toàn bộ dự án và vẫn giữ SQL cũ, chọn `SQL_PORT=14331`; hai SQL Server này có dữ liệu riêng.
 
@@ -72,3 +72,16 @@ Test tạo database tạm ngẫu nhiên và chỉ xóa database do chính test t
 Thay `ADMIN_PASSWORD` trong `.env` không tự đổi mật khẩu của tài khoản admin đã tồn tại. Khi khởi tạo lần đầu, API tạo admin nếu email chưa có, không tự nâng quyền tài khoản khách hàng trùng email.
 
 GitHub Pages chỉ host giao diện tĩnh. Nếu dùng workflow CD Web, phải đặt repository variable `VITE_API_URL` là URL HTTPS backend đã triển khai và cấu hình `CORS_ORIGIN` cho đúng miền Pages. Thiếu biến này workflow không deploy; có thể dùng Docker để phục vụ web và API cùng tên miền.
+
+## 6. SQL đăng nhập được nhưng website báo ELOGIN
+
+SQL Server Management Studio (SSMS) là ứng dụng có cửa sổ Connect bạn dùng để quản lý SQL. Thử kết nối mới tới cùng `localhost,1433`, SQL Server Authentication, user `sa`, nhập lại mật khẩu.
+
+Tại thư mục gốc CNPM, chạy `npm run db:check`. Lệnh chỉ đọc, in đường dẫn file `.env`, host/cổng/user/database thực tế và trạng thái đã đặt mật khẩu; không in mật khẩu, không tạo bảng hay đổi tài khoản. Backend cũng dùng cùng bộ đọc cấu hình.
+
+- File đúng là `CNPM/.env`, không phải `web/.env`, `server/.env` hay `.env.txt`.
+- Các biến `DB_*` có sẵn trong terminal/hệ thống được ưu tiên trước `.env`. Lệnh chẩn đoán liệt kê tên các biến này. Nếu đó là cấu hình cũ, có thể bỏ riêng biến đã xác định khỏi phiên PowerShell hiện tại, ví dụ `Remove-Item Env:DB_PORT -ErrorAction SilentlyContinue`, rồi chạy lại chẩn đoán. Không cần xóa các biến khác hoặc đổi SQL đang chạy.
+- Mật khẩu do `setup:local` sinh không tự đổi mật khẩu SQL có sẵn. Cần sửa `DB_PASSWORD` trong `.env` theo kết nối SQL đang dùng được. Nếu có dấu `#`/khoảng trắng, đặt giá trị trong dấu ngoặc kép. Giữ nguyên phần cấu hình admin và token.
+- ELOGIN hiện dừng ngay với hướng dẫn, không lặp thử60 lần cùng một mật khẩu. Lỗi mạng tạm thời vẫn được thử lại trong thời gian SQL khởi động.
+
+Sau khi sửa `.env`, lưu file và chạy lại `npm start`. Nếu gửi kết quả chẩn đoán để hỗ trợ, chỉ gửi output của lệnh; không gửi file `.env` hoặc mật khẩu.

@@ -19,17 +19,17 @@ npm run setup:local
 npm run install:app
 ```
 
-Mở file `.env` vừa tạo. Với máy trong ảnh của bạn:
+Mở file `.env` vừa tạo. Với SQL gốc bạn đã xác nhận (`localhost,1433`):
 
 ```ini
-DB_HOST=127.0.0.1
-DB_PORT=14330
+DB_HOST=localhost
+DB_PORT=1433
 DB_USER=sa
 DB_NAME=DubchefDB
 DB_TRUST_CERT=true
 ```
 
-Thay `DB_PASSWORD` bằng mật khẩu SQL Server thực tế **trong file `.env` trên máy bạn**. Giữ `ADMIN_PASSWORD` và `TOKEN_SECRET` ngẫu nhiên do script tạo, hoặc tự đổi. Không gửi mật khẩu vào chat. Sau đó:
+Thay `DB_PASSWORD` bằng mật khẩu SQL Server thực tế **trong file `.env` trên máy bạn**. Giữ `ADMIN_PASSWORD` và `TOKEN_SECRET` ngẫu nhiên do script tạo, hoặc tự đổi. Không gửi mật khẩu vào chat. Chạy `npm run db:check` để xem cấu hình thực tế (không in mật khẩu) và kiểm tra đăng nhập trước khi khởi động API. Sau đó:
 
 ```sh
 npm start

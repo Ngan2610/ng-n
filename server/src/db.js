@@ -6,36 +6,23 @@ import { fileURLToPath } from 'node:url';
 import { ACTIVE_MINUTES, dayKey } from './stats.js';
 import { hashPassword } from './auth.js';
 import { createServiceRepo } from './serviceRepo.js';
+import { databaseConfig } from './config.js';
 
 const DB_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'db');
-
-function config(database) {
-  if (!process.env.DB_PASSWORD) throw new Error('Thiếu DB_PASSWORD. Hãy cấu hình mật khẩu SQL Server trong .env hoặc biến môi trường.');
-  return {
-    server: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT || 1433),
-    user: process.env.DB_USER || 'sa',
-    password: process.env.DB_PASSWORD,
-    database,
-    options: {
-      encrypt: process.env.DB_ENCRYPT !== 'false',
-      trustServerCertificate: process.env.DB_TRUST_CERT == null
-        ? process.env.NODE_ENV !== 'production' : process.env.DB_TRUST_CERT === 'true',
-    },
-    pool: { max: 10, min: 0, idleTimeoutMillis: 30000 },
-  };
-}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** SQL Server cần vài chục giây để khởi động, nên thử lại cho đến khi kết nối được. */
-async function connect(database, tries = Number(process.env.DB_CONNECT_TRIES || 60)) {
+export async function connect(database, tries = Number(process.env.DB_CONNECT_TRIES || 60), makePool = (options) => new sql.ConnectionPool(options)) {
+  const options = databaseConfig(database);
+  const attempts = Math.max(1, Math.min(60, Math.trunc(tries) || 1));
   for (let n = 1; ; n++) {
     try {
-      return await new sql.ConnectionPool(config(database)).connect();
+      return await makePool(options).connect();
     } catch (e) {
-      if (n >= tries) throw e;
-      console.log(`Chờ SQL Server (${n}/${tries}): ${e.message}`);
+      // Sai tài khoản không thể tự khắc phục bằng cách thử lại 60 lần.
+      if (e.code === 'ELOGIN' || n >= attempts) throw e;
+      console.log(`Chờ SQL Server (${n}/${attempts}): ${e.code || 'connection_error'}`);
       await sleep(2000);
     }
   }

@@ -17,3 +17,5 @@ Mã nguồn sử dụng: `CNPM-main (4).zip`. File `dubchef test (2).zip` vượ
 Chưa kết nối hay thay đổi database trong ảnh của bạn. Cần chạy bản này trên máy có kết nối SQL đó, xác nhận `/api/health`, chạy kiểm thử SQL integration và kiểm tra `db/07-service-queries.sql`. Không thể khẳng định dữ liệu đã được ghi vào SQL của bạn trước khi thực hiện bước đó.
 
 Thanh toán thật, xác minh email/khôi phục mật khẩu qua email và xuất MP4 có giọng thuyết minh chưa tích hợp; xem README để tránh nhầm với chức năng đã thực hiện.
+
+Bổ sung chẩn đoán SQL: backend hiện có26 kiểm thử đạt,1 kiểm thử SQL thật vẫn bỏ qua có chủ đích. Bốn kiểm thử mới kiểm tra đọc đúng file .env, ưu tiên biến terminal, không in mật khẩu, phát hiện .env.txt và dừng ngay khi ELOGIN. Hướng dẫn kết nối gốc đã chỉnh theo localhost,1433 mà bạn xác nhận.
